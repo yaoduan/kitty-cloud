@@ -2,6 +2,7 @@ package com.cxytiandi.kittycloud.user.biz.service.impl;
 
 import com.cxytiandi.kittycloud.common.base.ResponseCode;
 import com.cxytiandi.kittycloud.common.exception.BizException;
+import com.cxytiandi.kittycloud.common.helper.JWTHelper;
 import com.cxytiandi.kittycloud.user.biz.bo.UserBO;
 import com.cxytiandi.kittycloud.user.biz.convert.UserBoConvert;
 import com.cxytiandi.kittycloud.user.biz.dao.UserDao;
@@ -31,19 +32,32 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserBoConvert userBoConvert;
 
+    @Autowired
+    private JWTHelper jwtHelper;
+
     @Override
     public UserBO getUser(Long id) {
         log.info("查询用户 [{}]", id);
         if (id == null) {
-            throw new BizException(ResponseCode.PARAM_ERROR_CODE);
+            throw new BizException(ResponseCode.PARAM_ERROR_CODE, "id不能为空");
         }
 
-        UserDO userDO = userDao.selectById(id);
+        UserDO userDO = userDao.getById(id);
         if (userDO == null) {
             throw new BizException(ResponseCode.NOT_FOUND_CODE);
         }
 
         return userBoConvert.convert(userDO);
+    }
+
+    @Override
+    public String login(String username, String pass) {
+        UserDO userDO = userDao.getByUsernameAndPass(username, pass);
+        if (userDO == null) {
+            throw new BizException(ResponseCode.USER_LOGIN_ERROR_CODE);
+        }
+
+        return jwtHelper.getToken(userDO.getId().toString());
     }
 
 }

@@ -54,14 +54,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>com.cxytiandi</groupId>
+            <artifactId>kitty-spring-cloud-starter-lock</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.cxytiandi</groupId>
-            <artifactId>kitty-spring-cloud-starter-lock</artifactId>
+            <artifactId>kitty-spring-cloud-starter-id</artifactId>
         </dependency>
     </dependencies>
 
